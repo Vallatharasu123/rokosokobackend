@@ -4,6 +4,7 @@ const express = require("express");
 const connectDB = require("./config/conn");
 const notifyRoutes = require("./routes/notifyRoutes");
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes"); // Corrected from duplicate authRoutes
 const seedDatabase = require("./seeders/authSeeder");
 const cors = require("cors");
 
@@ -25,7 +26,8 @@ if (process.env.NODE_ENV === "development") {
 
 // Routes
 app.use("/notify", notifyRoutes);
-app.use("/auth", authRoutes);
+app.use("/auth", authRoutes); // For login
+app.use("/users", userRoutes); // For add, edit, delete users
 app.get("/", (req, res) => {
   res.send("Hello from Node API");
 });
