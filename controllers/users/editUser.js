@@ -1,5 +1,3 @@
-// controllers/users/editUser.js
-
 const User = require('../../models/User');
 
 exports.editUser = async (req, res) => {
@@ -8,11 +6,11 @@ exports.editUser = async (req, res) => {
 
     // Check if the updateData contains status or roles
     if (updateData.status && !['active', 'Deactivated', 'Suspended', 'inactive'].includes(updateData.status)) {
-      return res.status(400).json({ message: 'Invalid status value' });
+      return res.status(200).json({ message: 'Invalid status value. Please use a valid status.' });
     }
 
     if (updateData.roles && !Array.isArray(updateData.roles)) {
-      return res.status(400).json({ message: 'Roles should be an array' });
+      return res.status(200).json({ message: 'Roles should be an array. Please provide an array of roles.' });
     }
 
     // Update multiple or single user based on the IDs provided
@@ -20,12 +18,12 @@ exports.editUser = async (req, res) => {
     const result = await User.updateMany(filter, updateData);
 
     if (result.modifiedCount === 0) {
-      return res.status(404).json({ message: 'User(s) not found' });
+      return res.status(200).json({ message: 'No users were updated. Please check the user IDs or the data.' });
     }
 
-    res.json({ message: 'User(s) updated successfully' });
+    res.status(200).json({ message: 'User(s) updated successfully', modifiedCount: result.modifiedCount });
   } catch (error) {
     console.error('Error editing user(s):', error);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(200).json({ message: 'Server Error while updating user(s). Please try again later.' });
   }
 };

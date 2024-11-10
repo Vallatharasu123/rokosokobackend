@@ -1,5 +1,3 @@
-// controllers/users/addUser.js
-
 const bcrypt = require('bcryptjs');
 const User = require('../../models/User');
 
@@ -10,7 +8,7 @@ exports.addUser = async (req, res) => {
     // Check if the user already exists
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(200).json({ message: 'User already exists' });
+      return res.status(200).json({ message: 'User already exists. Please try with different email.' });
     }
 
     // Hash the password
@@ -33,9 +31,9 @@ exports.addUser = async (req, res) => {
 
     await user.save();
 
-    res.json({ message: 'User added successfully' });
+    res.status(200).json({ message: 'User added successfully', user: user });
   } catch (error) {
     console.error('Error adding user:', error);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(200).json({ message: 'Server Error. Please try again later.' });
   }
 };
